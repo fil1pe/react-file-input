@@ -14,6 +14,7 @@ function App() {
         children: 'Delete',
       }}
       className="input"
+      maxLength={20}
       required
     />
   )

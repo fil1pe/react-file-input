@@ -4,6 +4,7 @@ import {
   DetailedHTMLProps,
   Dispatch,
   InputHTMLAttributes,
+  useMemo,
   useRef,
 } from 'react'
 
@@ -17,6 +18,7 @@ export default function FileInput({
   className,
   placeholder,
   deleteButton,
+  maxLength = 999,
 }: Omit<
   Omit<
     DetailedHTMLProps<InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>,
@@ -41,6 +43,12 @@ export default function FileInput({
 
   const input = useRef<HTMLInputElement>(null)
 
+  const fileName = useMemo(() => {
+    if (!value?.name) return ''
+    else if (value.name.length <= maxLength) return value.name
+    else return '...' + value.name.slice(value.name.length - maxLength + 3)
+  }, [value, maxLength])
+
   return (
     <div
       onClick={() => input.current?.click()}
@@ -59,7 +67,7 @@ export default function FileInput({
       }}
       className={className}
     >
-      <p>{value?.name || placeholder}</p>
+      <p>{fileName || placeholder}</p>
       {value && (
         <button
           {...deleteButton}
